@@ -15,6 +15,7 @@ from thrift.transport.TTransport import (
     TTransportException, TBufferedTransportFactory)
 
 from baseplate import config
+from baseplate.server.metrics import start_runtime_metrics_reporter
 
 
 # pylint: disable=too-many-public-methods
@@ -70,4 +71,6 @@ def make_server(server_config, listener, app):
         spawn=pool,
     )
     server.stop_timeout = cfg.stop_timeout
+
+    start_runtime_metrics_reporter(app, pool)
     return server
