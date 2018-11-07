@@ -105,6 +105,10 @@ class PooledClientProxy(object):
                         if span.flags:
                             prot.trans.set_header("Flags", str(span.flags))
 
+                        baseplate = span.baseplate
+                        if baseplate.service_name:
+                            prot.trans.set_header("Service-Name", baseplate.service_name)
+
                         try:
                             edge_context = span.context.raw_request_context
                         except AttributeError:

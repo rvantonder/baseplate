@@ -623,7 +623,8 @@ class Baseplate(object):
     integrate it with the application framework you are using.
 
     """
-    def __init__(self):
+    def __init__(self, service_name=None):
+        self.service_name = service_name
         self.observers = []
 
     def register(self, observer):
@@ -718,7 +719,7 @@ class Baseplate(object):
         from .context import ContextObserver
         self.register(ContextObserver(name, context_factory))
 
-    def make_server_span(self, context, name, trace_info=None):
+    def make_server_span(self, context, name, trace_info=None, client_name=None):
         """Return a server span representing the request we are handling.
 
         In a server, a server span represents the time spent on a single
@@ -738,9 +739,11 @@ class Baseplate(object):
         if trace_info is None:
             trace_info = TraceInfo.new()
 
-        server_span = ServerSpan(trace_info.trace_id, trace_info.parent_id,
+        server_span = ServerSpan(self,
+                                 trace_info.trace_id, trace_info.parent_id,
                                  trace_info.span_id, trace_info.sampled,
                                  trace_info.flags, name, WrappedRequestContext(context))
+        server_span.client_name = client_name
 
         for observer in self.observers:
             observer.on_server_span_created(context, server_span)
@@ -750,7 +753,8 @@ class Baseplate(object):
 class Span(object):
     """A span represents a single RPC within a system."""
 
-    def __init__(self, trace_id, parent_id, span_id, sampled, flags, name, context):
+    def __init__(self, baseplate, trace_id, parent_id, span_id, sampled, flags, name, context):
+        self.baseplate = baseplate
         self.trace_id = trace_id
         self.parent_id = parent_id
         self.id = span_id
@@ -860,14 +864,14 @@ class LocalSpan(Span):
 
         if local:
             context_copy = self.context.clone()
-            span = LocalSpan(self.trace_id, self.id, span_id, self.sampled,
-                             self.flags, name, context_copy)
+            span = LocalSpan(self.baseplate, self.trace_id, self.id, span_id,
+                             self.sampled, self.flags, name, context_copy)
             if component_name is None:
                 raise ValueError("Cannot create local span without component name.")
             span.component_name = component_name
             context_copy.shadow_context_attr('trace', span)
         else:
-            span = Span(
+            span = Span(self.baseplate,
                 self.trace_id, self.id, span_id, self.sampled,
                 self.flags, name, self.context)
         for observer in self.observers:

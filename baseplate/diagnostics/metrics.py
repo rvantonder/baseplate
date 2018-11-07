@@ -40,9 +40,11 @@ class MetricsServerSpanObserver(SpanObserver):
     def __init__(self, batch, server_span):
         self.batch = batch
         self.base_name = "server." + server_span.name
+        self.server_span = server_span
         self.timer = batch.timer(self.base_name)
 
     def on_start(self):
+        self.batch.counter(self.base_name + ".by_client." + self.server_span.client_name).increment()
         self.timer.start()
 
     def on_finish(self, exc_info):

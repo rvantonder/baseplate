@@ -78,10 +78,13 @@ class BaseplateProcessorEventHandler(TProcessorEventHandler):
         except (KeyError, ValueError):
             pass
 
+        client_name = headers.get(b"Service-Name", None)
+
         trace = self.baseplate.make_server_span(
             context,
             name=fn_name,
             trace_info=trace_info,
+            client_name=client_name,
         )
 
         try:
