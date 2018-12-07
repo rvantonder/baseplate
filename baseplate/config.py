@@ -508,7 +508,7 @@ class DictOf(Parser):
             root = key_path + "."
         else:
             root = ""
-        matcher = re.compile("^" + root.replace(".", r"\.") + r"([^.]+)")
+        matcher = re.compile("^{}{}".format(root.replace(".", r"\."), r"([^.]+)"))
 
         values = ConfigNamespace()
         seen_subkeys = set()

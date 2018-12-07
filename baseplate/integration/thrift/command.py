@@ -65,7 +65,7 @@ class BuildThriftCommand(Command):
                         for line in lines:
                             prefix = "from " + module_name
                             if line.startswith(prefix):
-                                f.write("from " + full_package_name + line[len(prefix):])
+                                f.write("from {}{}".format(full_package_name, line[len(prefix):]))
                             else:
                                 f.write(line)
 
