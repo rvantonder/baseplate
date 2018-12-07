@@ -99,7 +99,7 @@ def _decode_secret(path, encoding, value):
         try:
             return base64.b64decode(value)
         except (TypeError, binascii.Error) as exc:
-            raise CorruptSecretError(path, "unable to decode base64: %s" % exc)
+            raise CorruptSecretError(path, "unable to decode base64: {}".format(exc))
     else:
         raise CorruptSecretError(path, "unknown encoding: %r" % encoding)
 

@@ -17,7 +17,7 @@ def skip_if_server_unavailable(name, port):
         sock.settimeout(.1)
         sock.connect(("localhost", port))
     except socket.error:
-        raise unittest.SkipTest("local %s does not appear available" % name)
+        raise unittest.SkipTest("local {} does not appear available".format(name))
     else:
         sock.close()
 

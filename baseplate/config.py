@@ -213,7 +213,7 @@ def File(mode="r"):
         try:
             return open(text, mode=mode)
         except IOError:
-            raise ValueError("could not open file: %s" % text)
+            raise ValueError("could not open file: {}".format(text))
     return open_file
 
 
