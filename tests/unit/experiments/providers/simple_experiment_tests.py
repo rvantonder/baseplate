@@ -201,7 +201,7 @@ class TestSimpleExperiment(unittest.TestCase):
             # raw difference scales better as we change num_users.
             percent_equal = float(actual) / expected
             self.assertAlmostEqual(percent_equal, 1.0, delta=.10,
-                                   msg='bucket: %s' % bucket)
+                                   msg='bucket: {}'.format(bucket))
 
     @unittest.skipIf(os.environ.get("CI") != "true",
                      "test takes too long to run for normal local iteration")
@@ -270,7 +270,7 @@ class TestSimpleExperiment(unittest.TestCase):
             # raw difference scales better as we change NUM_USERS.
             percent_equal = float(actual) / expected
             self.assertAlmostEqual(percent_equal, 1.0, delta=.10,
-                                   msg='bucket: %s' % bucket)
+                                   msg='bucket: {}'.format(bucket))
 
     @mock.patch('baseplate.experiments.providers.simple_experiment.SimpleExperiment._choose_variant')
     def test_variant_returns_none_if_out_of_time_window(self, choose_variant_mock):
