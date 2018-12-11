@@ -50,7 +50,7 @@ def _reload_when_files_change(extra_files):
 
             initial_mtimes.setdefault(filename, current_mtime)
             if initial_mtimes[filename] < current_mtime:
-                logger.debug("Reloading, %s changed", filename)
+                logger.debug("Reloading, {} changed".format(filename))
                 os.execl(sys.executable, sys.executable, *sys.argv)
 
         time.sleep(.25)

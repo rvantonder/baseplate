@@ -112,7 +112,7 @@ def load_nonce():
         with open(NONCE_FILENAME, "r") as f:
             return f.read()
     except IOError as exc:
-        logger.debug("Nonce not found: %s.", exc)
+        logger.debug("Nonce not found: {}.".format(exc))
         return None
 
 

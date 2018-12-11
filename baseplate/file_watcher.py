@@ -86,7 +86,7 @@ class FileWatcher(object):
                 else:
                     break
 
-                logging.warning("%s: file not yet available. sleeping.", path)
+                logging.warning("{}: file not yet available. sleeping.".format(path))
             else:
                 raise WatchedFileNotAvailableError(self._path,
                     "timed out. last error was: %s" % last_error.inner)

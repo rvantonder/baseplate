@@ -84,12 +84,12 @@ def make_client(service_name, tracing_endpoint=None, tracing_queue_name=None,
         for.
     """
     if tracing_queue_name:
-        logger.info("Recording spans to queue %s", tracing_queue_name)
+        logger.info("Recording spans to queue {}".format(tracing_queue_name))
         recorder = SidecarRecorder(tracing_queue_name)
     elif tracing_endpoint:
         warn_deprecated("In-app trace publishing is deprecated in favor of the sidecar model.")
         remote_addr = '%s:%s' % tracing_endpoint.address
-        logger.info("Recording spans to %s", remote_addr)
+        logger.info("Recording spans to {}".format(remote_addr))
         recorder = RemoteRecorder(
             remote_addr,
             num_conns=num_conns,
@@ -133,7 +133,7 @@ class TraceBaseplateObserver(BaseplateObserver):
         try:
             self.hostname = socket.gethostbyname(socket.gethostname())
         except socket.gaierror as e:
-            logger.error("Hostname could not be resolved, error=%s", e)
+            logger.error("Hostname could not be resolved, error={}".format(e))
             self.hostname = 'undefined'
 
     @classmethod
@@ -430,7 +430,7 @@ class BaseBatchRecorder(object):
         try:
             self.span_queue.put_nowait(span)
         except Exception as e:
-            self.logger.error("Failed adding span to recording queue: %s", e)
+            self.logger.error("Failed adding span to recording queue: {}".format(e))
 
 
 class LoggingRecorder(BaseBatchRecorder):
@@ -449,7 +449,7 @@ class LoggingRecorder(BaseBatchRecorder):
     def flush_func(self, spans):
         """Write a set of spans to debug log."""
         for span in spans:
-            self.logger.debug("Span recording: %s", span)
+            self.logger.debug("Span recording: {}".format(span))
 
 
 class NullRecorder(BaseBatchRecorder):
@@ -506,7 +506,7 @@ class RemoteRecorder(BaseBatchRecorder):
                 timeout=1,
             )
         except RequestException as e:
-            self.logger.error("Error flushing spans: %s", e)
+            self.logger.error("Error flushing spans: {}".format(e))
 
 
 class TraceTooLargeError(Exception):

@@ -50,7 +50,7 @@ def generate_content(num_content, content_type):
     elif content_type == "comment":
         id_fmt = "t1_%s"
     else:
-        raise ValueError("Unknown content type: %s", content_type)
+        raise ValueError("Unknown content type: {}".format(content_type))
 
     for i in range(num_content):
         content.append(dict(id=id_fmt % i, type=content_type))

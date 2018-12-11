@@ -37,7 +37,7 @@ class UnexpectedChangeError(WriterError):
 
 
 def write_file_to_zookeeper(zookeeper, source_file, dest_path):
-    logger.info("Writing to %s in ZooKeeper...", dest_path)
+    logger.info("Writing to {} in ZooKeeper...".format(dest_path))
 
     try:
         current_data, stat = zookeeper.get(dest_path)
